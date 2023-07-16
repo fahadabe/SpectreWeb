@@ -1,0 +1,49 @@
+﻿@page "/dashboard"
+@attribute [Authorize]
+
+<PageTitle>Dashboard</PageTitle>
+<RadzenStack Orientation="Radzen.Orientation.Vertical">
+    <RadzenStack Orientation="Radzen.Orientation.Horizontal">
+        <RadzenCheckBox @bind-Value="ThisYear" Name="Year"></RadzenCheckBox>
+        <RadzenText Text="Show chart data for current year only" Component="Year" Style="margin-left: 8px; vertical-align: middle;" />
+    </RadzenStack>
+    <RadzenRow>
+        <RadzenColumn Size="2">
+            <PerformanceCard PerformanceData="TodayPerformance"></PerformanceCard>
+        </RadzenColumn>
+        <RadzenColumn Size="2">
+            <PerformanceCard PerformanceData="YesterdayPerformance"></PerformanceCard>
+        </RadzenColumn>
+        <RadzenColumn Size="2">
+            <PerformanceCard PerformanceData="ThisWeekPerformance"></PerformanceCard>
+        </RadzenColumn>
+        <RadzenColumn Size="2">
+            <PerformanceCard PerformanceData="ThisMonthPerformance"></PerformanceCard>
+        </RadzenColumn>
+        <RadzenColumn Size="2">
+            <PerformanceCard PerformanceData="YTDPerformance"></PerformanceCard>
+        </RadzenColumn>
+        <RadzenColumn Size="2">
+            <PerformanceCard PerformanceData="AllPerformance"></PerformanceCard>
+        </RadzenColumn>
+    </RadzenRow>
+    <RadzenChart ColorScheme="ColorScheme.Pastel">
+        <RadzenColumnSeries Data="@SaleChartData" CategoryProperty="Month" ValueProperty="Sale" Title="Sale"/>
+    </RadzenChart>
+    <RadzenChart ColorScheme="ColorScheme.Pastel">
+        <RadzenColumnSeries Data="@PurchaseChartData" CategoryProperty="Month" ValueProperty="Purchase" Title="Purchase" />
+    </RadzenChart>
+    <RadzenChart ColorScheme="ColorScheme.Pastel">
+        <RadzenColumnSeries Data="@ExpanseChartData" CategoryProperty="Month" ValueProperty="Expanse" Title="Expanse" />
+    </RadzenChart>
+</RadzenStack>
+   
+
+
+    
+   
+
+
+
+
+

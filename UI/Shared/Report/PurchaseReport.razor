@@ -1,0 +1,54 @@
+﻿<RadzenStack Orientation="Radzen.Orientation.Vertical">
+    <RadzenStack Orientation="Radzen.Orientation.Horizontal" JustifyContent="JustifyContent.Start">
+        <RadzenDatePicker AutoClose="true" @bind-Value="FromDate" DateFormat="dd-MM-yyyy"></RadzenDatePicker>
+        <RadzenDatePicker AutoClose="true" @bind-Value="ToDate" DateFormat="dd-MM-yyyy"></RadzenDatePicker>
+    </RadzenStack>
+
+    <RadzenStack Orientation="Radzen.Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
+        <RadzenSelectBar @bind-Value=@SelectedFilter TValue="PurchaseFilter">
+            <Items>
+                <RadzenSelectBarItem Text="Today" Value="PurchaseFilter.Today" />
+                <RadzenSelectBarItem Text="Yesterday" Value="PurchaseFilter.Yesterday" />
+                <RadzenSelectBarItem Text="All" Value="PurchaseFilter.All" />
+                <RadzenSelectBarItem Text="Between Dates" Value="PurchaseFilter.BetweenDates" />
+            </Items>
+        </RadzenSelectBar>
+
+
+
+
+        <AuthorizeView Policy="CanViewReport">
+            <Authorized>
+                <RadzenButton Click="DisplayPurchase">
+                    Display
+                </RadzenButton>
+            </Authorized>
+        </AuthorizeView>
+
+
+
+
+    </RadzenStack>
+
+
+
+    <RadzenDataGrid TItem="PurchaseModel" @bind-Data="@PurchaseList" class="rz-mb-4" AllowPaging="true" PageSize="10" AllowFiltering="true" AllowSorting="true">
+        <Columns>
+            <RadzenDataGridColumn TItem="PurchaseModel" Property="Date" Title="Date" FormatString="{0:D}" />
+            <RadzenDataGridColumn TItem="PurchaseModel" Property="Description" Title="Description" />
+            <RadzenDataGridColumn TItem="PurchaseModel" Property="AddedBy" Title="Cashier" />
+            <RadzenDataGridColumn TItem="PurchaseModel" Property="Amount" Title="Amount" FormatString="{0:N2}" />
+            <AuthorizeView Policy="CanDeletePurchase">
+                <Authorized>
+                    <RadzenDataGridColumn TItem="PurchaseModel" TextAlign="TextAlign.Right" Sortable="false" Filterable="false" Pickable="false" Groupable="false">
+                        <Template Context="cellContext">
+                            <RadzenButton Variant="Radzen.Variant.Outlined" Click="@(() => DeleteSelectedPurchasePurchase(@cellContext))">Delete</RadzenButton>
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Authorized>
+            </AuthorizeView>
+        </Columns>
+    </RadzenDataGrid>
+
+</RadzenStack>
+

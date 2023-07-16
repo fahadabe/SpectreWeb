@@ -1,0 +1,54 @@
+﻿<RadzenStack Orientation="Radzen.Orientation.Vertical">
+    <RadzenStack Orientation="Radzen.Orientation.Horizontal" JustifyContent="JustifyContent.Start">
+        <RadzenDatePicker AutoClose="true" @bind-Value="FromDate" DateFormat="dd-MM-yyyy"></RadzenDatePicker>
+        <RadzenDatePicker AutoClose="true" @bind-Value="ToDate" DateFormat="dd-MM-yyyy"></RadzenDatePicker>
+    </RadzenStack>
+
+    <RadzenStack Orientation="Radzen.Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
+        <RadzenSelectBar @bind-Value=@SelectedFilter TValue="SaleFilter">
+            <Items>
+                <RadzenSelectBarItem Text="Today" Value="SaleFilter.Today" />
+                <RadzenSelectBarItem Text="Yesterday" Value="SaleFilter.Yesterday" />
+                <RadzenSelectBarItem Text="All" Value="SaleFilter.All" />
+                <RadzenSelectBarItem Text="Between Dates" Value="SaleFilter.BetweenDates" />
+            </Items>
+        </RadzenSelectBar>
+
+
+
+
+        <AuthorizeView Policy="CanViewReport">
+            <Authorized>
+                <RadzenButton Click="DisplaySale">
+                    Display
+                </RadzenButton>
+            </Authorized>
+        </AuthorizeView>
+
+
+
+
+    </RadzenStack>
+
+
+
+    <RadzenDataGrid TItem="SaleModel" @bind-Data="@SaleList" class="rz-mb-4" AllowPaging="true" PageSize="10" AllowFiltering="true" AllowSorting="true">
+        <Columns>
+            <RadzenDataGridColumn TItem="SaleModel" Property="Date" Title="Date" FormatString="{0:D}" />
+            <RadzenDataGridColumn TItem="SaleModel" Property="Description" Title="Description" />
+            <RadzenDataGridColumn TItem="SaleModel" Property="AddedBy" Title="Cashier" />
+            <RadzenDataGridColumn TItem="SaleModel" Property="Amount" Title="Amount" FormatString="{0:N2}" />
+            <AuthorizeView Policy="CanDeleteSale">
+                <Authorized>
+                    <RadzenDataGridColumn TItem="SaleModel" TextAlign="TextAlign.Right" Sortable="false" Filterable="false" Pickable="false" Groupable="false">
+                        <Template Context="cellContext">
+                            <RadzenButton Variant="Radzen.Variant.Outlined" Click="@(() => DeleteSelectedSaleSale(@cellContext))">Delete</RadzenButton>
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Authorized>
+            </AuthorizeView>
+        </Columns>
+    </RadzenDataGrid>
+
+</RadzenStack>
+

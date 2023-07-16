@@ -1,0 +1,23 @@
+﻿@page "/reports"
+@attribute [Authorize]
+<PageTitle>Reports</PageTitle>
+    <RadzenTabs RenderMode="TabRenderMode.Client">
+        <Tabs>
+
+            <RadzenTabsItem Text="Sale">
+                <SaleReport></SaleReport>
+            </RadzenTabsItem>
+
+            <RadzenTabsItem Text="Purchase">
+                <PurchaseReport></PurchaseReport>
+            </RadzenTabsItem>
+
+            <RadzenTabsItem Text="Expanse">
+                <ExpanseReport></ExpanseReport>
+            </RadzenTabsItem>
+
+        </Tabs>
+    </RadzenTabs>
+
+
+

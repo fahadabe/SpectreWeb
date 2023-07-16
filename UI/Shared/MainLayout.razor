@@ -1,0 +1,61 @@
+﻿@inherits LayoutComponentBase
+
+<RadzenDialog />
+<RadzenNotification />
+<RadzenContextMenu />
+<RadzenTooltip />
+
+<RadzenLayout>
+    <RadzenHeader>
+        <RadzenStack Orientation="Radzen.Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
+            <RadzenStack Orientation="Radzen.Orientation.Horizontal" AlignItems="Radzen.AlignItems.Center" Gap="0">
+                <RadzenSidebarToggle Click="ToggleSidebar" />
+                <RadzenLabel Text="Spectre, record keeping" />
+            </RadzenStack>
+            <RadzenProfileMenu Click="OnProfileMenuClick" >
+                <Template>
+                    <RadzenGravatar Email="admin"></RadzenGravatar>
+                </Template>
+                <ChildContent>
+                    <RadzenProfileMenuItem Text="Logout" Icon="logout"></RadzenProfileMenuItem>
+                </ChildContent>
+            </RadzenProfileMenu>
+        </RadzenStack>
+        
+    </RadzenHeader>
+    <RadzenSidebar @bind-Expanded="@isOpen">
+        <RadzenPanelMenu>
+            <RadzenPanelMenuItem Text="Dashboard" Path="/dashboard"  />
+            <RadzenPanelMenuItem Text="Sale" Path="/sale"  />
+            <RadzenPanelMenuItem Text="Purchase" Path="/purchase" />
+            <RadzenPanelMenuItem Text="Expanse" Path="/expanse"  />
+            <AuthorizeView Policy="CanViewReport">
+                 <Authorized>
+                    <RadzenPanelMenuItem Text="Reports" Path="/reports" />
+                 </Authorized>
+            </AuthorizeView>
+
+            <AuthorizeView Policy="ManageUsers">
+                <Authorized>
+                    <RadzenPanelMenuItem Text="Users" Path="/users" />
+                </Authorized>
+            </AuthorizeView>
+        </RadzenPanelMenu>
+       
+    </RadzenSidebar>
+    <RadzenBody>
+        
+            @Body
+        
+    </RadzenBody>
+</RadzenLayout>
+
+<style>
+
+    body {
+        margin: 0;
+    }
+</style>
+
+    
+

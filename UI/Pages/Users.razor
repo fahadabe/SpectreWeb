@@ -1,0 +1,208 @@
+﻿@page "/users"
+@attribute [Authorize]
+<PageTitle>Users</PageTitle>
+<RadzenCard class="rz-p-3">
+
+    <RadzenStack Orientation="Radzen.Orientation.Horizontal">
+        <RadzenStack Orientation="Radzen.Orientation.Vertical" Gap="3" Style="flex:1;">
+            <RadzenStack Orientation="Radzen.Orientation.Vertical" class="rz-mb-3">
+                <RadzenTextBox Placeholder="Username" @bind-Value="NewUser.Username"></RadzenTextBox>
+                <RadzenStack Orientation="Radzen.Orientation.Horizontal">
+                    <RadzenPassword Placeholder="Password" @bind-Value="NewUser.Password" style="flex:1;"></RadzenPassword>
+                    <AuthorizeView Policy="ManageUsers">
+                        <Authorized>
+                            <RadzenButton Click="SaveNewUser">Save</RadzenButton>
+                        </Authorized>
+                    </AuthorizeView>
+                    
+                </RadzenStack>
+            </RadzenStack>
+            <RadzenCard class="rz-p-0">
+                <RadzenStack Orientation="Radzen.Orientation.Vertical">
+                    <RadzenCard class="rz-mb-3">
+                        <RadzenStack Orientation="Radzen.Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
+                            <RadzenText>Permissions</RadzenText>
+                            <RadzenCheckBox @bind-Value="ToggleAllPermissionsForNewUser"></RadzenCheckBox>
+                        </RadzenStack>
+                    </RadzenCard>
+                    <RadzenStack Orientation="Radzen.Orientation.Vertical" JustifyContent="JustifyContent.Start" class="rz-p-4">
+                        <RadzenStack Orientation="Radzen.Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" class="rz-mb-4">
+                            <RadzenStack Orientation="Radzen.Orientation.Horizontal">
+                                <RadzenCheckBox @bind-Value="NewUser.CanAddSale" Name="CanAddSale"></RadzenCheckBox>
+                                <RadzenText Text="Add Sale" Component="CanAddSale" Style="margin-left: 8px; vertical-align: middle;" />
+                            </RadzenStack>
+
+                                <RadzenStack Orientation="Radzen.Orientation.Horizontal">
+                                    <RadzenCheckBox @bind-Value="NewUser.CanDeleteSale" Name="CanDeleteSale" />
+                                    <RadzenText Text="Delete Sale" Component="CanDeleteSale" Style="margin-left: 8px; vertical-align: middle;" />
+                                </RadzenStack>
+
+                                    <RadzenStack Orientation="Radzen.Orientation.Horizontal">
+                                <RadzenCheckBox @bind-Value="NewUser.CanAddPurchase" Name="CanAddPurchase" />
+                                <RadzenText Text="Add Purchase" Component="CanAddPurchase" Style="margin-left: 8px; vertical-align: middle;" />
+                                    </RadzenStack>
+
+                                        <RadzenStack Orientation="Radzen.Orientation.Horizontal">
+                                <RadzenCheckBox @bind-Value="NewUser.CanDeletePurchase" Name="CanDeletePurchase"></RadzenCheckBox>
+                                <RadzenText Text="Delete Purchase" Component="CanDeletePurchase" Style="margin-left: 8px; vertical-align: middle;" />
+                            </RadzenStack>
+                           
+                            
+                        </RadzenStack>
+                        <RadzenStack Orientation="Radzen.Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
+
+
+
+                                            <RadzenStack Orientation="Radzen.Orientation.Horizontal">
+                                <RadzenCheckBox @bind-Value="NewUser.CanAddExpanse" Name="CanAddExpanse" />
+                                <RadzenText Text="Add Expanse" Component="CanAddExpanse" Style="margin-left: 8px; vertical-align: middle;" />
+                            </RadzenStack>
+
+                                                <RadzenStack Orientation="Radzen.Orientation.Horizontal">
+                                <RadzenCheckBox @bind-Value="NewUser.CanDeleteExpanse" Name="CanDeleteExpanse" />
+                                <RadzenText Text="Delete Expanse" Component="CanDeleteExpanse" Style="margin-left: 8px; vertical-align: middle;" />
+                            </RadzenStack>
+                                                    <RadzenStack Orientation="Radzen.Orientation.Horizontal">
+                                <RadzenCheckBox @bind-Value="NewUser.ManageUsers" Name="ManageUsers"></RadzenCheckBox>
+                                <RadzenText Text="Manage Users" Component="ManageUsers" Style="margin-left: 8px; vertical-align: middle;" />
+                            </RadzenStack>
+
+                                                        <RadzenStack Orientation="Radzen.Orientation.Horizontal">
+                                <RadzenCheckBox @bind-Value="NewUser.CanViewReport" Name="CanViewReport"></RadzenCheckBox>
+                                <RadzenText Text="View Reports" Component="CanViewReport" Style="margin-left: 8px; vertical-align: middle;" />
+                                            </RadzenStack>
+
+
+                        </RadzenStack>
+                    </RadzenStack>
+                </RadzenStack>
+
+                
+            </RadzenCard>
+
+        </RadzenStack>
+
+        <RadzenStack Style="flex:1;">
+
+            <RadzenDataGrid TItem="UserModel" @bind-Data="@UserList" class="rz-mb-4" AllowPaging="true" PageSize="10" AllowFiltering="true" AllowSorting="true">
+                <Columns>
+                    <RadzenDataGridColumn TItem="UserModel" Property="Username" Title="Username" />
+                    
+                    <AuthorizeView Policy="CanDeleteSale">
+                        <Authorized>
+                            <RadzenDataGridColumn TItem="UserModel" TextAlign="TextAlign.Right" Sortable="false" Filterable="false" Pickable="false" Groupable="false">
+                                <Template Context="cellContext">
+                                    <RadzenStack Orientation="Radzen.Orientation.Horizontal" JustifyContent="JustifyContent.End">
+                                        <RadzenButton Variant="Radzen.Variant.Outlined" ButtonStyle="ButtonStyle.Info" Click="@(() => EditUser(@cellContext))">Edit</RadzenButton>
+                                        <RadzenButton Variant="Radzen.Variant.Outlined" ButtonStyle="ButtonStyle.Danger" Click="@(() => DeleteUser(@cellContext))">Delete</RadzenButton>
+                                    </RadzenStack>
+                                </Template>
+                            </RadzenDataGridColumn>
+                        </Authorized>
+                    </AuthorizeView>
+                </Columns>
+            </RadzenDataGrid>
+
+            
+        </RadzenStack>
+    </RadzenStack>
+
+   
+</RadzenCard>
+
+@code{
+    private async Task EditUser(UserModel user)
+    {
+        if (string.Equals(user.Username, CurrentUser.Username))
+        {
+            Notification.Notify(NotificationSeverity.Warning, "Cannot edit yourself");
+            return;
+        }
+
+        SelectedUser = user;
+
+
+        var result = await DialogService.OpenAsync("Edit User", ds =>
+    @<RadzenStack Orientation="Radzen.Orientation.Vertical" Gap="3" Style="flex:1;">
+        <RadzenStack Orientation="Radzen.Orientation.Vertical" class="rz-mb-3">
+            <RadzenTextBox Placeholder="Username" @bind-Value="SelectedUser.Username"></RadzenTextBox>
+            <RadzenStack Orientation="Radzen.Orientation.Horizontal">
+                <RadzenPassword Placeholder="Password" @bind-Value="SelectedUser.Password" style="flex:1;"></RadzenPassword>
+                <AuthorizeView Policy="ManageUsers">
+                    <Authorized>
+                        <RadzenButton Click="UpdateUser">Update</RadzenButton>
+                    </Authorized>
+                </AuthorizeView>
+
+            </RadzenStack>
+        </RadzenStack>
+        <RadzenCard class="rz-p-0">
+            <RadzenStack Orientation="Radzen.Orientation.Vertical">
+                <RadzenCard class="rz-mb-3">
+                    <RadzenStack Orientation="Radzen.Orientation.Horizontal">
+                        <RadzenText>Permissions</RadzenText>
+                        
+                    </RadzenStack>
+                </RadzenCard>
+                <RadzenStack Orientation="Radzen.Orientation.Vertical" JustifyContent="JustifyContent.Start" class="rz-p-4">
+                    <RadzenStack Orientation="Radzen.Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" class="rz-mb-4">
+                        <RadzenStack Orientation="Radzen.Orientation.Horizontal">
+                            <RadzenCheckBox @bind-Value="SelectedUser.CanAddSale" Name="CanAddSale"></RadzenCheckBox>
+                            <RadzenText Text="Add Sale" Component="CanAddSale" Style="margin-left: 8px; vertical-align: middle;" />
+                        </RadzenStack>
+
+                        <RadzenStack Orientation="Radzen.Orientation.Horizontal">
+                            <RadzenCheckBox @bind-Value="SelectedUser.CanDeleteSale" Name="CanDeleteSale" />
+                            <RadzenText Text="Delete Sale" Component="CanDeleteSale" Style="margin-left: 8px; vertical-align: middle;" />
+                        </RadzenStack>
+
+                        <RadzenStack Orientation="Radzen.Orientation.Horizontal">
+                            <RadzenCheckBox @bind-Value="SelectedUser.CanAddPurchase" Name="CanAddPurchase" />
+                            <RadzenText Text="Add Purchase" Component="CanAddPurchase" Style="margin-left: 8px; vertical-align: middle;" />
+                        </RadzenStack>
+
+                        <RadzenStack Orientation="Radzen.Orientation.Horizontal">
+                            <RadzenCheckBox @bind-Value="SelectedUser.CanDeletePurchase" Name="CanDeletePurchase"></RadzenCheckBox>
+                            <RadzenText Text="Delete Purchase" Component="CanDeletePurchase" Style="margin-left: 8px; vertical-align: middle;" />
+                        </RadzenStack>
+
+
+                    </RadzenStack>
+                    <RadzenStack Orientation="Radzen.Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
+
+
+
+                        <RadzenStack Orientation="Radzen.Orientation.Horizontal">
+                            <RadzenCheckBox @bind-Value="SelectedUser.CanAddExpanse" Name="CanAddExpanse" />
+                            <RadzenText Text="Add Expanse" Component="CanAddExpanse" Style="margin-left: 8px; vertical-align: middle;" />
+                        </RadzenStack>
+
+                        <RadzenStack Orientation="Radzen.Orientation.Horizontal">
+                            <RadzenCheckBox @bind-Value="SelectedUser.CanDeleteExpanse" Name="CanDeleteExpanse" />
+                            <RadzenText Text="Delete Expanse" Component="CanDeleteExpanse" Style="margin-left: 8px; vertical-align: middle;" />
+                        </RadzenStack>
+                        <RadzenStack Orientation="Radzen.Orientation.Horizontal">
+                            <RadzenCheckBox @bind-Value="SelectedUser.ManageUsers" Name="ManageUsers"></RadzenCheckBox>
+                            <RadzenText Text="Manage Users" Component="ManageUsers" Style="margin-left: 8px; vertical-align: middle;" />
+                        </RadzenStack>
+
+                        <RadzenStack Orientation="Radzen.Orientation.Horizontal">
+                            <RadzenCheckBox @bind-Value="SelectedUser.CanViewReport" Name="CanViewReport"></RadzenCheckBox>
+                            <RadzenText Text="View Reports" Component="CanViewReport" Style="margin-left: 8px; vertical-align: middle;" />
+                        </RadzenStack>
+
+
+                    </RadzenStack>
+                </RadzenStack>
+            </RadzenStack>
+
+
+        </RadzenCard>
+
+    </RadzenStack>);
+
+
+
+    }
+}
+

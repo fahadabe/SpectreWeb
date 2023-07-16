@@ -1,0 +1,59 @@
+﻿@page "/expanse"
+@attribute [Authorize]
+<PageTitle>Expanse</PageTitle>
+
+    <RadzenTabs RenderMode="TabRenderMode.Client">
+        <Tabs>
+            <RadzenTabsItem Text="Today">
+                <RadzenDataGrid TItem="ExpanseModel" @bind-Data="@TodayExpanselist" class="rz-mb-4" AllowPaging="true" PageSize="10" AllowFiltering="true" AllowSorting="true">
+                    <Columns>
+                        <RadzenDataGridColumn TItem="ExpanseModel" Property="Date" Title="Date" FormatString="{0:D}" />
+                        <RadzenDataGridColumn TItem="ExpanseModel" Property="Description" Title="Description" />
+                        <RadzenDataGridColumn TItem="ExpanseModel" Property="AddedBy" Title="Cashier" />
+                        <RadzenDataGridColumn TItem="ExpanseModel" Property="Amount" Title="Amount" FormatString="{0:N2}" />
+                        <AuthorizeView Policy="CanDeleteExpanse">
+                            <Authorized>
+                                <RadzenDataGridColumn TItem="ExpanseModel" TextAlign="TextAlign.Right" Sortable="false" Filterable="false" Pickable="false" Groupable="false">
+                                    <Template Context="cellContext">
+                                        <RadzenButton Variant="Radzen.Variant.Outlined" ButtonStyle="ButtonStyle.Danger" Click="@(() => DeleteTodayExpanse(@cellContext))">Delete</RadzenButton>
+                                    </Template>
+                                </RadzenDataGridColumn>
+                            </Authorized>
+                        </AuthorizeView>
+                    </Columns>
+                </RadzenDataGrid>
+
+
+                <RadzenCard Variant="Radzen.Variant.Flat">
+                    <RadzenStack Orientation="Radzen.Orientation.Horizontal" JustifyContent="JustifyContent.Stretch" Gap="4">
+                        <RadzenTextBox @bind-Value="@NewExpanse.Description" Placeholder="Expanse Description" Style="flex:1;" />
+                        <RadzenNumeric @bind-Value="@NewExpanse.Amount" Placeholder="Expanse Amount" ShowUpDown="false" />
+                        <RadzenButton Click="SaveNewExpanse">Add</RadzenButton>
+                    </RadzenStack>
+                </RadzenCard>
+
+            </RadzenTabsItem>
+            <RadzenTabsItem Text="Yesterday">
+                <RadzenDataGrid TItem="ExpanseModel" Data="@YesterdayExpanselist" AllowPaging="true" PageSize="12" AllowFiltering="true" AllowSorting="true">
+                    <Columns>
+                        <RadzenDataGridColumn TItem="ExpanseModel" Property="Date" Title="Date" FormatString="{0:D}" />
+                        <RadzenDataGridColumn TItem="ExpanseModel" Property="Description" Title="Description" />
+                        <RadzenDataGridColumn TItem="ExpanseModel" Property="AddedBy" Title="Cashier" />
+                        <RadzenDataGridColumn TItem="ExpanseModel" Property="Amount" Title="Amount" FormatString="{0:N2}" />
+                        <AuthorizeView Policy="CanDeleteExpanse">
+                            <Authorized>
+                                <RadzenDataGridColumn TItem="ExpanseModel" TextAlign="TextAlign.Right">
+                                    <Template Context="cellContext">
+                                        <RadzenButton Variant="Radzen.Variant.Outlined" Click="@(() => DeleteYesterdayExpanse(@cellContext))">Delete</RadzenButton>
+                                    </Template>
+                                </RadzenDataGridColumn>
+                            </Authorized>
+                        </AuthorizeView>
+                    </Columns>
+                </RadzenDataGrid>
+            </RadzenTabsItem>
+        </Tabs>
+    </RadzenTabs>
+
+
+

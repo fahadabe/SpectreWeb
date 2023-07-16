@@ -1,0 +1,37 @@
+﻿
+
+
+    
+        
+    
+    
+            <RadzenCard class="rz-p-0">
+                <RadzenStack Orientation="Radzen.Orientation.Vertical">
+                    <RadzenCard class="rz-m-0">
+                        <RadzenText >@PerformanceData.Identifier</RadzenText>
+                    </RadzenCard>
+                    
+                    <RadzenStack Orientation="Radzen.Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" class="rz-px-3">
+                        <RadzenText>Sale</RadzenText>
+                        <RadzenText>@PerformanceData.Sale.ToString("N2")</RadzenText>
+                    </RadzenStack>
+        <RadzenStack Orientation="Radzen.Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" class="rz-px-3">
+                        <RadzenText>Purchase</RadzenText>
+                        <RadzenText>@PerformanceData.Purchase.ToString("N2")</RadzenText>
+                    </RadzenStack>
+        <RadzenStack Orientation="Radzen.Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" class="rz-px-3 rz-mb-3">
+                        <RadzenText>Expanse</RadzenText>
+                        <RadzenText>@PerformanceData.Expanse.ToString("N2")</RadzenText>
+                    </RadzenStack>
+                </RadzenStack>
+                
+            </RadzenCard>
+
+
+
+
+@code {
+    [Parameter]
+    public PerformanceModel PerformanceData{ get; set; }
+
+}

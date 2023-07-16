@@ -1,0 +1,36 @@
+﻿@layout LoginLayout
+@page "/"
+<PageTitle>Login</PageTitle>
+
+<RadzenLayout>
+    <RadzenBody>
+
+<RadzenStack Gap="0" Class="rz-my-12 rz-mx-auto rz-border-radius-6 rz-shadow-10" Style="width: 100%; max-width: 400px; overflow: hidden;">
+            <RadzenText TextAlign="TextAlign.Center" TextStyle="TextStyle.DisplayH5" class="rz-pt-3">Spectre,</RadzenText>
+    <RadzenText TextAlign="TextAlign.Center" TextStyle="TextStyle.DisplayH6" class="rz-pb-3">record keeping</RadzenText>
+        <RadzenCard Class="rz-shadow-0 rz-border-radius-0 rz-background-color-primary rz-p-12" style="text-align: center;">
+            <RadzenText TextStyle="TextStyle.DisplayH3" TagName="TagName.H3" Class="rz-color-white rz-mb-0">Login</RadzenText>
+        </RadzenCard>
+    
+        <RadzenStack Orientation="Orientation.Vertical" class="rz-shadow-0 rz-p-12" Gap="4" >
+
+            <RadzenTextBox @bind-Value="@User.Username" Placeholder="Username"/>
+       
+            <RadzenPassword @bind-Value="@User.Password" Placeholder="Password"/>
+        
+            <RadzenButton Click="@LoginUser">Login</RadzenButton>
+
+        </RadzenStack>
+       
+</RadzenStack>
+    </RadzenBody>
+
+</RadzenLayout>
+
+
+
+
+
+
+
+

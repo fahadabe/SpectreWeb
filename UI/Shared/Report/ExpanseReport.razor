@@ -1,0 +1,56 @@
+﻿
+    <RadzenStack Orientation="Radzen.Orientation.Vertical">
+        <RadzenStack Orientation="Radzen.Orientation.Horizontal" JustifyContent="JustifyContent.Start">
+            <RadzenDatePicker AutoClose="true" @bind-Value="FromDate" DateFormat="dd-MM-yyyy"></RadzenDatePicker>
+            <RadzenDatePicker AutoClose="true" @bind-Value="ToDate" DateFormat="dd-MM-yyyy"></RadzenDatePicker>
+        </RadzenStack>
+
+        <RadzenStack Orientation="Radzen.Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween">
+                <RadzenSelectBar @bind-Value=@SelectedFilter TValue="ExpanseFilter">
+                    <Items>
+                        <RadzenSelectBarItem Text="Today" Value="ExpanseFilter.Today" />
+                        <RadzenSelectBarItem Text="Yesterday" Value="ExpanseFilter.Yesterday" />
+                        <RadzenSelectBarItem Text="All" Value="ExpanseFilter.All" />
+                        <RadzenSelectBarItem Text="Between Dates" Value="ExpanseFilter.BetweenDates" />
+                    </Items>
+                </RadzenSelectBar>
+
+
+
+       
+            <AuthorizeView Policy="CanViewReport">
+                            <Authorized>
+                    <RadzenButton Click="DisplayExpanse">
+                        Display
+                    </RadzenButton>
+                                </Authorized>
+                                </AuthorizeView>
+       
+
+
+
+        </RadzenStack>
+
+        
+
+        <RadzenDataGrid TItem="ExpanseModel" @bind-Data="@ExpanseList" class="rz-mb-4" AllowPaging="true" PageSize="10" AllowFiltering="true" AllowSorting="true">
+            <Columns>
+                <RadzenDataGridColumn TItem="ExpanseModel" Property="Date" Title="Date" FormatString="{0:D}" />
+                <RadzenDataGridColumn TItem="ExpanseModel" Property="Description" Title="Description" />
+                <RadzenDataGridColumn TItem="ExpanseModel" Property="AddedBy" Title="Cashier" />
+                <RadzenDataGridColumn TItem="ExpanseModel" Property="Amount" Title="Amount" FormatString="{0:N2}" />
+                <AuthorizeView Policy="CanDeleteExpanse">
+                    <Authorized>
+                        <RadzenDataGridColumn TItem="ExpanseModel" TextAlign="TextAlign.Right" Sortable="false" Filterable="false" Pickable="false" Groupable="false">
+                            <Template Context="cellContext">
+                                <RadzenButton Variant="Radzen.Variant.Outlined" Click="@(() => DeleteSelectedExpanseExpanse(@cellContext))">Delete</RadzenButton>
+                            </Template>
+                        </RadzenDataGridColumn>
+                    </Authorized>
+                </AuthorizeView>
+            </Columns>
+        </RadzenDataGrid>
+
+    </RadzenStack>
+
+

@@ -1,0 +1,70 @@
+﻿@page "/sale"
+@attribute [Authorize]
+<PageTitle>Sale</PageTitle>
+
+<RadzenTabs RenderMode="TabRenderMode.Client">
+        <Tabs >
+            <RadzenTabsItem Text="Today">
+                    <RadzenDataGrid TItem="SaleModel" @bind-Data="@TodaySalelist"  class="rz-mb-4" AllowPaging="true" PageSize="10" AllowFiltering="true" AllowSorting="true">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="SaleModel" Property="Date" Title="Date" FormatString="{0:D}" />
+                            <RadzenDataGridColumn TItem="SaleModel" Property="Description" Title="Description" />
+                            <RadzenDataGridColumn TItem="SaleModel" Property="AddedBy" Title="Cashier" />
+                            <RadzenDataGridColumn TItem="SaleModel" Property="Amount" Title="Amount" FormatString="{0:N2}" />
+                            <AuthorizeView Policy="CanDeleteSale">
+                                <Authorized>
+                                    <RadzenDataGridColumn TItem="SaleModel" TextAlign="TextAlign.Right" Sortable="false" Filterable="false" Pickable="false" Groupable="false">
+                                        <Template Context="cellContext">
+                                        <RadzenButton Variant="Radzen.Variant.Outlined" Click="@(() => DeleteTodaySale(@cellContext))">Delete</RadzenButton>
+                                        </Template>
+                                    </RadzenDataGridColumn>
+                                </Authorized>
+                            </AuthorizeView>
+                        </Columns>
+                    </RadzenDataGrid>
+
+            
+                    <RadzenCard Variant="Radzen.Variant.Flat">
+                        <RadzenStack Orientation="Radzen.Orientation.Horizontal" JustifyContent="JustifyContent.Stretch" Gap="4">
+                            <RadzenTextBox @bind-Value="@NewSale.Description" Placeholder="Sale Description" Style="flex:1;"/>
+                            <RadzenNumeric @bind-Value="@NewSale.Amount" Placeholder="Sale Amount" ShowUpDown="false"/>
+                            <RadzenButton Click="SaveNewSale">Add</RadzenButton>
+                        </RadzenStack>
+                    </RadzenCard>
+               
+            </RadzenTabsItem>
+            <RadzenTabsItem Text="Yesterday">
+                <RadzenDataGrid TItem="SaleModel" Data="@YesterdaySalelist"  AllowPaging="true" PageSize="12" AllowFiltering="true" AllowSorting="true">
+                    <Columns>
+                        <RadzenDataGridColumn TItem="SaleModel" Property="Date" Title="Date" FormatString="{0:D}" />
+                        <RadzenDataGridColumn TItem="SaleModel" Property="Description" Title="Description" />
+                        <RadzenDataGridColumn TItem="SaleModel" Property="AddedBy" Title="Cashier" />
+                        <RadzenDataGridColumn TItem="SaleModel" Property="Amount" Title="Amount" FormatString="{0:N2}" />
+                        <AuthorizeView Policy="CanDeleteSale">
+                            <Authorized>
+                            <RadzenDataGridColumn TItem="SaleModel" TextAlign="TextAlign.Right">
+                                    <Template Context="cellContext">
+                                        <RadzenButton Variant="Radzen.Variant.Outlined" Click="@(() => DeleteYesterdaySale(@cellContext))">Delete</RadzenButton>
+                                    </Template>
+                                </RadzenDataGridColumn>
+                            </Authorized>
+                        </AuthorizeView>
+                    </Columns>
+                </RadzenDataGrid>
+            </RadzenTabsItem>
+        </Tabs>
+    </RadzenTabs>
+
+       
+   
+
+
+    
+
+
+
+
+
+
+
+
