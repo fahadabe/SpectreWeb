@@ -1,0 +1,49 @@
+*****tblExpanse*****
+
+CREATE TABLE "tblExpanse" (
+	"ExpanseID"	INTEGER NOT NULL UNIQUE,
+	"Date"	TEXT,
+	"Description"	TEXT DEFAULT 'default',
+	"Amount"	NUMERIC DEFAULT 0,
+	"AddedBy"	TEXT,
+	PRIMARY KEY("ExpanseID" AUTOINCREMENT)
+)
+
+*****tblPurchase*****
+
+CREATE TABLE "tblPurchase" (
+	"PurchaseID"	INTEGER NOT NULL UNIQUE,
+	"Date"	TEXT,
+	"Description"	TEXT DEFAULT 'default',
+	"Amount"	NUMERIC DEFAULT 0,
+	"AddedBy"	TEXT,
+	PRIMARY KEY("PurchaseID" AUTOINCREMENT)
+)
+
+*****tblSale*****
+
+CREATE TABLE "tblSale" (
+	"SaleID"	INTEGER NOT NULL UNIQUE,
+	"Date"	TEXT,
+	"Description"	TEXT DEFAULT 'default',
+	"Amount"	NUMERIC DEFAULT 0,
+	"AddedBy"	TEXT,
+	PRIMARY KEY("SaleID" AUTOINCREMENT)
+)
+
+*****tblUser*****
+
+CREATE TABLE "tblUser" (
+	"UserID"	INTEGER NOT NULL UNIQUE,
+	"Username"	TEXT,
+	"Password"	TEXT,
+	"CanAddExpanse"	INTEGER DEFAULT 0,
+	"CanDeleteExpanse"	INTEGER DEFAULT 0,
+	"CanAddSale"	INTEGER DEFAULT 0,
+	"CanDeleteSale"	INTEGER DEFAULT 0,
+	"CanAddPurchase"	INTEGER DEFAULT 0,
+	"CanDeletePurchase"	INTEGER DEFAULT 0,
+	"CanViewReport"	INTEGER DEFAULT 0,
+	"ManageUsers"	INTEGER DEFAULT 0,
+	PRIMARY KEY("UserID" AUTOINCREMENT)
+)
